@@ -17,7 +17,7 @@ namespace AbTestMaster.Initialization
             var groups = new List<SplitView>();
 
             List<Type> allValidControllers =
-                GetAllControllers<AbTestMasterController>(GetAssemblyByName(AbTestMasterBootstrapper.AssmeblyName));
+                GetAllControllers<AbTestMasterController>(GetAssemblyByName(AbTestMasterBootstrapper.AssmeblyNames));
 
             foreach (Type controllerType in allValidControllers)
             {
@@ -58,7 +58,7 @@ namespace AbTestMaster.Initialization
             var groups = new List<SplitGoal>();
 
             List<Type> allValidControllers =
-                GetAllControllers<AbTestMasterController>(GetAssemblyByName(AbTestMasterBootstrapper.AssmeblyName));
+                GetAllControllers<AbTestMasterController>(GetAssemblyByName(AbTestMasterBootstrapper.AssmeblyNames));
 
             foreach (var controllerType in allValidControllers)
             {
@@ -132,19 +132,28 @@ namespace AbTestMaster.Initialization
             return area;
         }
 
-        private static Assembly GetAssemblyByName(string assmeblyName)
+        private static List<Assembly> GetAssemblyByName(string[] assmeblyNames)
         {
-            return Assembly.Load(assmeblyName);
+            List<Assembly> _result = new List<Assembly>();
+            foreach(var _assembly in assmeblyNames)
+            {
+                _result.Add(Assembly.Load(_assembly));
+            }
+            return _result;
         }
 
-        private static List<Type> GetAllControllers<T>(Assembly assembly)
+        private static List<Type> GetAllControllers<T>(List<Assembly> assemblies)
         {
             var derivedType = typeof(T);
-
-            return
-                assembly
+            var _resultList = new List<Type>();
+            foreach(var _assembly in assemblies)
+            {
+                _resultList.AddRange(_assembly
                 .GetTypes()
-                .Where(t => t != derivedType && t.IsSubclassOf(derivedType)).ToList();
+                .Where(t => t != derivedType && t.IsSubclassOf(derivedType)).ToList());
+            }
+
+            return _resultList;
         }
 
         #endregion

@@ -4,11 +4,11 @@ namespace AbTestMaster.Initialization
 {
     public class AbTestMasterBootstrapper
     {
-        internal static string AssmeblyName;
+        internal static string[] AssmeblyNames;
 
-        public static void Initialize(string assemblyName)
+        public static void Initialize(string[] assemblyNames)
         {
-            AssmeblyName = assemblyName;
+            AssmeblyNames = assemblyNames;
 
             //on application initialise, load all views, goals, configuration & targets
             SplitServices.SplitViews = SplitFinder.FindSplitViews();
